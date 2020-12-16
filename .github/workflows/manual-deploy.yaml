@@ -1,0 +1,37 @@
+name: Manually deploy
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Which env to deploy'
+        required: true
+        default: 'qa'
+      version:
+        description: 'Version of artifact'
+        required: ture
+        default: ''
+
+jobs:
+  deploy-to-dev:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to dev
+      run: |
+          echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
+      if: ${{ github.event.inputs.environment }} == 'dev'
+
+  deploy-to-qa:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to qa
+      run: |
+          echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
+      if: ${{ github.event.inputs.environment }} == 'qa'
+
+  deploy-to-stg:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to stg
+      run: |
+        echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
+      if: ${{ github.event.inputs.environment }} == 'stg'
