@@ -18,14 +18,14 @@ jobs:
     - name: Deploy to dev
       run: |
           echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-      if: ${{ github.event.inputs.environment }} == 'dev'
+      if: ${{ github.event.inputs.environment == 'dev' }}
 
     - name: Deploy to qa
       run: |
           echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-      if: ${{ github.event.inputs.environment }} == 'qa'
+      if: ${{ github.event.inputs.environment == 'qa' }}
 
     - name: Deploy to stg
       run: |
         echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-      if: ${{ github.event.inputs.environment }} == 'stg'
+      if: ${{ github.event.inputs.environment == 'stg' }}
