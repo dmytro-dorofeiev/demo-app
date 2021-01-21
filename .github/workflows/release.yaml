@@ -41,7 +41,7 @@ jobs:
       run: |
         git config --global user.email "ci@example.com"
         git config --global user.name "Github CI"
-        git tag -a ${{ steps.version.outputs.version }}
+        git tag ${{ steps.version.outputs.version }}
         git push --tags
 
     # - name: Create Release
