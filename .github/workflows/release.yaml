@@ -19,7 +19,7 @@ jobs:
       run: cat version.txt
 
     - name: Print release version
-      run: echo "Release Version is ${{ steps.version.output }}"
+      run: echo "Release Version is ${{ steps.version.outputs }}"
     # - name: Create Release
     #   id: create_release
     #   uses: actions/create-release@latest
