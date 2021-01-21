@@ -36,5 +36,14 @@ jobs:
 
     - uses: notlmn/release-with-changelog@v3
       with:
-        token: '${{ secrets.GITHUB_TOKEN }}'
-        exclude: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+        exclude: '^Meta'
+        commit-template: '- {title} ← {hash}'
+        template: |
+          ### Changelog
+
+          {commits}
+
+          {range}
+
+          ❤
