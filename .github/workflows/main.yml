@@ -87,11 +87,3 @@ jobs:
         job: ${{ toJson(job) }}
         steps: ${{ toJson(steps) }}
 
-    - name: Microsoft Teams Notification on fail
-      uses: skitionek/notify-microsoft-teams@master
-      if: failure()
-      with:
-        webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-        needs: ${{ toJson(needs) }}
-        job: ${{ toJson(job) }}
-        steps: ${{ toJson(steps) }}
