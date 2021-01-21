@@ -28,11 +28,12 @@ jobs:
 
     - name: Check if this tag exsists
       run: |
-        if git rev-parse -q --verify "refs/tags/${{ steps.version.outputs.version }}" >/dev/null; then
+        if [[ $(git ls-remote --exit-code --tags origin ${{ steps.version.outputs.version }}) ]]; then
             echo "This tag already exsists"
             exit 1
         else
             echo "This tag wasn't not found"
+            exit 0
         fi
 
     - name: Create Release Tag
