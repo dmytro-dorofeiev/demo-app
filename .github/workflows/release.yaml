@@ -37,6 +37,9 @@ jobs:
             exit 0
         fi
 
+    - name: Re-Tag Docker Image
+      run: echo "New docker image"
+
     - name: Create Release Tag
       run: |
         git config --global user.email "ci@example.com"
