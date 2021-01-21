@@ -1,8 +1,13 @@
-on:
-  push
+# on:
+#   push
     # Sequence of patterns matched against refs/tags
     # tags:
     #   - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+on:
+  push:
+    paths:
+        - 'version.txt'
 
 name: Create Release
 
@@ -20,6 +25,15 @@ jobs:
 
     - name: Print release version
       run: echo "Release Version is ${{ steps.version.outputs.version }}"
+
+    - name: Check if this tag exsists
+      run: git ls-remote --exit-code --tags origin ${{ steps.version.outputs.version }} ; echo "this tags already exsists"; exit 1 || echo 'not found'
+
+    - name: Create Release Tag
+      run: |
+        git tag -a ${{ steps.version.outputs.version }}"
+        git push --tags
+
     # - name: Create Release
     #   id: create_release
     #   uses: actions/create-release@latest
@@ -35,16 +49,16 @@ jobs:
     #     draft: false
     #     prerelease: false
 
-    # - uses: notlmn/release-with-changelog@v3
-    #   with:
-    #     token: ${{ secrets.GITHUB_TOKEN }}
-    #     exclude: '^Meta'
-    #     commit-template: '- {title} ← {hash}'
-    #     template: |
-    #       ### Changelog
+    - uses: notlmn/release-with-changelog@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        exclude: '^Meta'
+        commit-template: '- {title} ← {hash}'
+        template: |
+          ### Changelog
 
-    #       {commits}
+          {commits}
 
-    #       {range}
+          {range}
 
-    #       ❤
+          ❤
