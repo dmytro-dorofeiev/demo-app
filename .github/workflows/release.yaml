@@ -8,6 +8,7 @@ on:
   push:
     paths:
         - 'version.txt'
+  workflow_dispatch: []
 
 name: Create Release
 
@@ -38,7 +39,7 @@ jobs:
 
     - name: Create Release Tag
       run: |
-        git tag -a ${{ steps.version.outputs.version }}"
+        git tag -a ${{ steps.version.outputs.version }}
         git push --tags
 
     # - name: Create Release
