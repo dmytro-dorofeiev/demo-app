@@ -27,7 +27,13 @@ jobs:
       run: echo "Release Version is ${{ steps.version.outputs.version }}"
 
     - name: Check if this tag exsists
-      run: git ls-remote --exit-code --tags origin ${{ steps.version.outputs.version }} || echo 'not found'
+      run: |
+        if git rev-parse -q --verify "refs/tags/${{ steps.version.outputs.version }}" >/dev/null; then
+            echo "This tag already exsists"
+            exit 1
+        else
+            echo "This tag wasn't not found"
+        fi
 
     - name: Create Release Tag
       run: |
