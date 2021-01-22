@@ -14,6 +14,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: stg
     steps:
     - uses: actions/checkout@v2
       with:
@@ -30,8 +32,6 @@ jobs:
       if: ${{ github.event.inputs.environment == 'qa' }}
 
     - name: Deploy to stg
-      environment:
-        name: stg
       run: |
         echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
       # if: ${{ github.event.inputs.environment == 'stg' }}
