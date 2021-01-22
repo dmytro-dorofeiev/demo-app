@@ -30,20 +30,22 @@ jobs:
       if: ${{ github.event.inputs.environment == 'qa' }}
 
     - name: Deploy to stg
+      environment:
+        name: stg
       run: |
         echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-      if: ${{ github.event.inputs.environment == 'stg' }}
+      # if: ${{ github.event.inputs.environment == 'stg' }}
 
-    - uses: notlmn/release-with-changelog@v3
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        exclude: '^Meta'
-        commit-template: '- {title} ← {hash}'
-        template: |
-          ### Changelog
+    # - uses: notlmn/release-with-changelog@v3
+    #   with:
+    #     token: ${{ secrets.GITHUB_TOKEN }}
+    #     exclude: '^Meta'
+    #     commit-template: '- {title} ← {hash}'
+    #     template: |
+    #       ### Changelog
 
-          {commits}
+    #       {commits}
 
-          {range}
+    #       {range}
 
-          ❤
+    #       ❤

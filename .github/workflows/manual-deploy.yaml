@@ -36,7 +36,7 @@ jobs:
   deploy_to_stg:
     runs-on: ubuntu-latest
     environment:
-      name: dev
+      name: stg
       url: https://test.net
     steps:
     - name: Deploy to stg
