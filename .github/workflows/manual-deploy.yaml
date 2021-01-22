@@ -26,7 +26,7 @@ jobs:
     - name: Deploy to qa
       run: |
           echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-      if: ${{ github.event.inputs.environment == 'qa' }}
+      # if: ${{ github.event.inputs.environment == 'qa' }}
     - name: Microsoft Teams Notification
       uses: skitionek/notify-microsoft-teams@master
       if: always()
@@ -35,19 +35,22 @@ jobs:
 
   deploy_to_stg:
     runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: https://test.net
     steps:
     - name: Deploy to stg
       run: |
         echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-      if: ${{ github.event.inputs.environment == 'stg' }}
+      # if: ${{ github.event.inputs.environment == 'stg' }}
 
-  if_failure:
-    name: Only if failure
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@master
-      - name: Microsoft Teams Notification
-        uses: skitionek/notify-microsoft-teams@master
-        if: failure()
-        with:
-          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+  # if_failure:
+  #   name: Only if failure
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     - uses: actions/checkout@master
+  #     - name: Microsoft Teams Notification
+  #       uses: skitionek/notify-microsoft-teams@master
+  #       if: failure()
+  #       with:
+  #         webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
