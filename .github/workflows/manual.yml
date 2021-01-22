@@ -28,7 +28,7 @@ jobs:
     - name: Deploy to dev
       run: |
           echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-      if: ${{ github.event.inputs.environment == 'dev' }}
+      if: ${{ github.event.inputs.environment == 'dev' }} || ${{ github.workflow.name == 'CI build' }}
 
     - name: Deploy to qa
       run: |
