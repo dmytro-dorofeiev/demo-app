@@ -11,11 +11,15 @@ on:
         required: true
         default: ''
 
+  workflow_run:
+    workflows: ["CI build"]
+    branches: [main]
+    types:
+      - completed
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: stg
     steps:
     - uses: actions/checkout@v2
       with:
@@ -34,7 +38,7 @@ jobs:
     - name: Deploy to stg
       run: |
         echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-      # if: ${{ github.event.inputs.environment == 'stg' }}
+      if: ${{ github.event.inputs.environment == 'stg' }}
 
     # - uses: notlmn/release-with-changelog@v3
     #   with:
