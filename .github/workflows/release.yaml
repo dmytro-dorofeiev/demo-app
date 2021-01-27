@@ -5,10 +5,19 @@
     #   - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 on:
-  push:
-    paths:
-        - 'version.txt'
+  # push:
+  #   paths:
+  #       - 'version.txt'
   workflow_dispatch:
+    inputs:
+      promote_version:
+        description: 'Docker image hash tag to promote'
+        required: true
+        default: ''
+      release_version:
+        description: 'Release version of artifact'
+        required: true
+        default: ''
 
 name: Create Release
 
@@ -20,16 +29,17 @@ jobs:
       with:
         fetch-depth: 10
 
-    - name: Get release version
-      id: version
-      run: echo ::set-output name=version::$(cat version.txt)
+    # - name: Get release version
+    #   id: version
+    #   run: echo ::set-output name=version::$(cat version.txt)
 
     - name: Print release version
-      run: echo "Release Version is ${{ steps.version.outputs.version }}"
+      run: echo "Release Version is ${{ github.event.inputs.release_version }}"
+      # run: echo "Release Version is ${{ steps.version.outputs.version }}"
 
     - name: Check if this tag exsists
       run: |
-        if [[ $(git ls-remote --exit-code --tags origin ${{ steps.version.outputs.version }}) ]]; then
+        if [[ $(git ls-remote --exit-code --tags origin ${{ github.event.inputs.release_version }}) ]]; then
             echo "This tag already exsists"
             exit 1
         else
@@ -44,7 +54,7 @@ jobs:
       run: |
         git config --global user.email "ci@example.com"
         git config --global user.name "Github CI"
-        git tag ${{ steps.version.outputs.version }}
+        git tag ${{ github.event.inputs.release_version }}
         git push --tags
 
     # - name: Create Release
