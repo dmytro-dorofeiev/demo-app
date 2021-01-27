@@ -1,4 +1,5 @@
 name: Manually deploy
+
 on:
   workflow_dispatch:
     inputs:
@@ -18,7 +19,7 @@ jobs:
     - name: Deploy to dev
       run: |
           echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-      if: ${{ github.event.inputs.environment == 'dev' }}
+      if: github.event.inputs.environment == 'dev'
 
   deploy_to_qa:
     runs-on: ubuntu-20.04
@@ -27,7 +28,7 @@ jobs:
     - name: Deploy to qa
       run: |
           echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-      # if: ${{ github.event.inputs.environment == 'qa' }}
+      # if: github.event.inputs.environment == 'qa'
     - name: Microsoft Teams Notification
       uses: skitionek/notify-microsoft-teams@master
       if: always()
@@ -44,7 +45,7 @@ jobs:
     - name: Deploy to stg
       run: |
         echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-      # if: ${{ github.event.inputs.environment == 'stg' }}
+      # if:  github.event.inputs.environment == 'stg'
 
   # if_failure:
   #   name: Only if failure
