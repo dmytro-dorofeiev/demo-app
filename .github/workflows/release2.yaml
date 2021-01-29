@@ -21,7 +21,6 @@ jobs:
       run: echo "Release Version is ${{ steps.version.outputs.version }}"
 
     - name: Extract version from branch name (for release branches)
-      if: startsWith(github.event.pull_request.head.ref, 'release/')
       run: |
         BRANCH_NAME="${GITHUB_REF##*/}"
         BRANCH_VERSION=${BRANCH_NAME#release/}
@@ -29,7 +28,7 @@ jobs:
           
     - name: Check if this tag exsists
       run: |
-        if [[  $GITHUB_ENV -eq ${{ steps.version.outputs.version }}) ]]; then
+        if [[  $GITHUB_ENV -eq ${{ steps.version.outputs.version }} ]]; then
             echo "Branch version equal to version in version.txt"
             exit 0
         else
