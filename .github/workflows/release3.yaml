@@ -1,6 +1,7 @@
 name: Create Release v3
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
