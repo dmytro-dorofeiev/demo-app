@@ -30,9 +30,9 @@ jobs:
     - name: Debug output BRANCH_VERSION
       run: echo "Branch version ${{ steps.branch_version.outputs.branch_version }}"
 
-    - name: Check if this tag exsists
+    - name: Check if version.txt equal to release version
       run: |
-        if [[ ${{ steps.branch_version.outputs.branch_version }} -eq ${{ steps.version.outputs.version }} ]]; then
+        if [[ "${{ steps.branch_version.outputs.branch_version }}" -eq "${{ steps.version.outputs.version }}" ]]; then
             echo "Branch version equal to version in version.txt"
             exit 0
         else
