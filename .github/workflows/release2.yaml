@@ -1,0 +1,79 @@
+name: Create Release v2
+
+on:
+  push:
+    branches:
+      - "release-*"
+
+jobs:
+  release:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 10
+
+    - name: Get release version
+      id: version
+      run: echo ::set-output name=version::$(cat version.txt)
+
+    - name: Print release version
+      run: echo "Release Version is ${{ steps.version.outputs.version }}"
+
+    - name: Extract version from branch name (for release branches)
+      if: startsWith(github.event.pull_request.head.ref, 'release/')
+      run: |
+        BRANCH_NAME="${GITHUB_REF##*/}"
+        BRANCH_VERSION=${BRANCH_NAME#release/}
+        echo "RELEASE_VERSION=$BRANCH_VERSION" >> $GITHUB_ENV
+          
+    - name: Check if this tag exsists
+      run: |
+        if [[  $GITHUB_ENV -eq ${{ steps.version.outputs.version }}) ]]; then
+            echo "Branch version equal to version in version.txt"
+            exit 0
+        else
+            echo "Branch version is different to version in version.txt"
+            exit 1
+        fi
+
+    - name: Build Code
+      run: echo "Build Code"
+
+    - name: Test Code
+      run: echo "Build Code"
+
+    - name: Build and Push Docker Image
+      run: echo "New docker image"
+
+    - name: Deploy to Stg
+      run: echo "Deploy to Stg"
+
+    # - name: Create Release
+    #   id: create_release
+    #   uses: actions/create-release@latest
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+    #   with:
+    #     tag_name: ${{ github.ref }}
+    #     release_name: Release ${{ github.ref }}
+    #     body: |
+    #       Changes in this Release
+    #       - First Change
+    #       - Second Change
+    #     draft: false
+    #     prerelease: false
+
+    # - uses: notlmn/release-with-changelog@v3
+    #   with:
+    #     token: ${{ secrets.GITHUB_TOKEN }}
+    #     exclude: '^Meta'
+    #     commit-template: '- {title} ← {hash}'
+    #     template: |
+    #       ### Changelog
+
+    #       {commits}
+
+    #       {range}
+
+    #       ❤
