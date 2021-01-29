@@ -26,7 +26,6 @@ jobs:
         git config --global user.email "ci@github.com"
         git config --global user.name "Github CI"
         git checkout -b release-${{ steps.version.outputs.version }}
-        git commit –message "Prepare release release-${{ steps.version.outputs.version }}"
         git push origin release-${{ steps.version.outputs.version }}
 
     - name: Build Code
