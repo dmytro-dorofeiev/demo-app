@@ -13,18 +13,21 @@ jobs:
       with:
         fetch-depth: 10
 
-    - name: Get release version
+    - name: Get release version from version.txt
       id: version
       run: echo ::set-output name=version::$(cat version.txt)
 
-    - name: Print release version
+    - name: Print release version.txt version
       run: echo "Release Version is ${{ steps.version.outputs.version }}"
 
     - name: Extract version from branch name (for release branches)
       run: |
-        BRANCH_NAME="${GITHUB_REF##*/}"
+        BRANCH_NAME=${GITHUB_REF##*/}
         BRANCH_VERSION=${BRANCH_NAME#release/}
         echo "RELEASE_VERSION=$BRANCH_VERSION" >> $GITHUB_ENV
+        echo "RELEASE_VERSION = $RELEASE_VERSION"
+        echo "BRANCH_VERSION = $BRANCH_VERSION"
+        echo "GITHUB_ENV = $GITHUB_ENV"
           
     - name: Check if this tag exsists
       run: |
