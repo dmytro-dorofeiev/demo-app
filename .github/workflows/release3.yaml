@@ -21,6 +21,13 @@ jobs:
     - name: Print release version.txt version
       run: echo "Release Version is ${{ steps.version.outputs.version }}"
 
+    - name: Set docker image version
+      id: tag_name
+      run: echo ::set-output name=tag_name::${{ github.event.repository.name }}-${{ steps.version.outputs.version }}
+
+    - name: Output docker image version
+      run: echo "Docker imager tag = ${{ steps.tag_name.outputs.tag_name }}"
+
     - name: Create release branch
       run: |
         git config --global user.email "ci@github.com"
