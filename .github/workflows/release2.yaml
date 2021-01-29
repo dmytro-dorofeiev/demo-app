@@ -62,17 +62,3 @@ jobs:
         release_name: Release ${{ steps.branch_version.outputs.branch_version }}
         draft: false
         prerelease: false
-
-    # - uses: notlmn/release-with-changelog@v3
-    #   with:
-    #     token: ${{ secrets.GITHUB_TOKEN }}
-    #     exclude: '^Meta'
-    #     commit-template: '- {title} ← {hash}'
-    #     template: |
-    #       ### Changelog
-
-    #       {commits}
-
-    #       {range}
-
-    #       ❤
