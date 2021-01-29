@@ -22,7 +22,12 @@ jobs:
       run: echo "Release Version is ${{ steps.version.outputs.version }}"
 
     - name: Create release branch
-      run: git checkout -b release-${{ steps.version.outputs.version }}
+      run: |
+        git config --global user.email "ci@github.com"
+        git config --global user.name "Github CI"
+        git checkout -b release-${{ steps.version.outputs.version }}
+        git commit –message "Prepare release release-${{ steps.version.outputs.version }}"
+        git push origin release-${{ steps.version.outputs.version }}
 
     - name: Build Code
       run: echo "Build Code"
