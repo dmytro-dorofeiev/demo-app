@@ -23,11 +23,8 @@ jobs:
     - name: Extract version from branch name (for release branches)
       id: branch_version
       run: |
-        BRANCH=${GITHUB_REF##*/}
-        BRANCH_NAME=${BRANCH_NAME#release/}
-        BRANCH_VERSION=$($BRANCH_VERSION | cut -d '-' -f2)
+        BRANCH_VERSION=$(echo ${GITHUB_REF##*/} | cut -d '-' -f2)
         echo "BRANCH_VERSION = $BRANCH_VERSION"
-        echo "BRANCH_NAME = $BRANCH_NAME"
         echo ::set-output name=branch_version::$BRANCH_VERSION
 
     - name: Debug output BRANCH_VERSION
