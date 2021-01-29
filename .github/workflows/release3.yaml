@@ -1,0 +1,36 @@
+name: Create Release v3
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'version.txt'
+
+jobs:
+  release:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Get release version from version.txt
+      id: version
+      run: echo ::set-output name=version::$(cat version.txt)
+
+    - name: Print release version.txt version
+      run: echo "Release Version is ${{ steps.version.outputs.version }}"
+
+    - name: Create release branch
+      run: git checkout -b release-${{ steps.version.outputs.version }}
+
+    - name: Build Code
+      run: echo "Build Code"
+
+    - name: Test Code
+      run: echo "Build Code"
+
+    - name: Build and Push Docker Image
+      run: echo "New docker image"
+
+    - name: Deploy to Stg
+      run: echo "Deploy to Stg"
