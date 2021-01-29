@@ -32,7 +32,7 @@ jobs:
 
     - name: Check if version.txt equal to release version
       run: |
-        if [[ $(echo ${{ steps.branch_version.outputs.branch_version }} | tr -d '.') -eq $(echo ${{ steps.version.outputs.version }} | tr -d '.' ]]; then
+        if [[ `echo ${{ steps.branch_version.outputs.branch_version }} | tr -d '.'` -eq `echo ${{ steps.version.outputs.version }} | tr -d '.'` ]]; then
             echo "Branch version equal to version in version.txt"
             exit 0
         else
