@@ -1,0 +1,121 @@
+
+name: Manually deploy 2
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Which env to deploy'
+        required: true
+        default: 'eu-dev-1'
+      app_version:
+        description: 'Docker image tag to deploy'
+        required: false
+        default: ""
+
+env:
+  ECR_REPOSITORY: payment-ui-${{ github.event.inputs.environment }}
+  ECS_SERVICE: ui
+  ECS_CONTAINER_NAME: ui
+  ECS_CLUSTER_NAME: payment-${{ github.event.inputs.environment }}-cluster
+  ECS_TASK_DEFINITION: payment-${{ github.event.inputs.environment }}-ui-td.json
+
+jobs:
+  deploy_job:
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: ${{ github.event.inputs.environment }}]
+        include:
+          - environment: eu-dev-1
+            aws_access_key_id: AWS_ACCESS_KEY_ID_DEV
+            aws_secret_access_key: AWS_SECRET_ACCESS_KEY_DEV
+            aws_region: "eu-west-1"
+          - environment: eu-stg-1
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_EU_STG }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_EU_STG }}
+          - environment: eu-prd-1
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_EU_PRD }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PRD }}
+    name: Manually deploy to ${{ matrix.environment }}
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '12'
+      if: github.event.inputs.app_version == ''
+    
+    - name: Run CI
+      # run: npm ci
+      run: echo "runngin npm ci"
+      if: github.event.inputs.app_version == ''
+
+    - name: Run build
+      # run: npm run build --if-present
+      run: echo "npm run build --if-present"
+      if: github.event.inputs.app_version == ''
+
+    - name: Run test
+      # run: npm test
+      run: echo "npm test"
+      if: github.event.inputs.app_version == ''
+
+    - name: Configure AWS credentials
+      # uses: aws-actions/configure-aws-credentials@v1
+      # with:
+      #   aws-access-key-id: ${{ secrets[matrix.aws_access_key_id] }}
+      #   aws-secret-access-key: ${{ secrets[matrix.aws_secret_access_key] }}
+      #   aws-region: ${{ secrets[matrix.aws_region] }}
+      run: echo "Configure AWS creds"
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      # uses: aws-actions/amazon-ecr-login@v1
+      run: echo "Login to ECR"
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        # Build a docker container and
+        # push it to ECR so that it can
+        # be deployed to ECS.
+        # docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        # echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        echo "Building ${{ env.IMAGE_TAG }}"
+      if: github.event.inputs.app_version == ''
+
+    - run: if [ ${{ github.event.inputs.app_version }} != '' ]; then 
+        echo ::set-output name=tag_name::${{ github.event.inputs.app_version }}
+        else
+        echo ::set-output name=tag_name::${{ steps.build-image.outputs.image }}
+      id: image
+
+    - name: Debug image version to deploy
+      run: echo ${{ steps.image.outputs.tag_name }}
+
+    # - name: Fill in the new image ID in the Amazon ECS task definition
+    #   id: task-def
+    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+    #   with:
+    #     task-definition: ${{ env.ECS_TASK_DEFINITION }}
+    #     container-name: ${{ env.ECS_CONTAINER_NAME }}
+    #     image: ${{ steps.image.outputs.tag_name }}
+
+    - name: Deploy Amazon ECS task definition
+      # uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      # with:
+      #   task-definition: ${{ steps.task-def.outputs.task-definition }}
+      #   service: ${{ env.ECS_SERVICE }}
+      #   cluster: ${{ env.ECS_CLUSTER_NAME }}
+      #   wait-for-service-stability: true
+      run: |
+        echo "Deploy \
+        task-definition: ${{ steps.task-def.outputs.task-definition }} \
+        service: ${{ env.ECS_SERVICE }} \
+        cluster: ${{ env.ECS_CLUSTER_NAME }}"
