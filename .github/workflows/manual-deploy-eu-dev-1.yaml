@@ -90,7 +90,7 @@ jobs:
       id: image
 
     - name: Debug image version to deploy
-      run: echo ${{ steps.image.outputs.image }}
+      run: echo "image version = ${{ steps.image.outputs.image }}"
 
     # - name: Fill in the new image ID in the Amazon ECS task definition
     #   id: task-def
