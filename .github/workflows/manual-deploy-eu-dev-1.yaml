@@ -1,5 +1,5 @@
 
-name: Manually deploy 3
+name: Manually deploy eu-dev-1
 
 on:
   workflow_dispatch:
@@ -12,8 +12,13 @@ on:
         description: 'Docker image tag to deploy'
         required: false
         default: ""
+      aws_region:
+        description: 'AWS region'
+        required: true
+        default: "eu-west-1"
 
 env:
+  AWS_REGION: ${{ github.event.inputs.aws_region }}
   ECR_REPOSITORY: payment-ui-${{ github.event.inputs.environment }}
   ECS_SERVICE: ui
   ECS_CONTAINER_NAME: ui
@@ -22,24 +27,7 @@ env:
 
 jobs:
   deploy_job:
-    strategy:
-      fail-fast: false
-      matrix:
-        environment: [ github.event.inputs.environment ]
-        include:
-          - environment: eu-dev-1
-            aws_access_key_id: AWS_ACCESS_KEY_ID_DEV
-            aws_secret_access_key: AWS_SECRET_ACCESS_KEY_DEV
-            aws_region: "eu-west-1"
-          - environment: eu-stg-1
-            aws_access_key_id: AWS_ACCESS_KEY_ID_EU_STG
-            aws_secret_access_key: AWS_SECRET_ACCESS_KEY_EU_STG
-            aws_region: "eu-west-1"
-          - environment: eu-prd-1
-            aws_access_key_id: AWS_ACCESS_KEY_ID_EU_PRD
-            aws_secret_access_key: AWS_SECRET_ACCESS_KEY_PRD
-            aws_region: "eu-west-1"
-    name: Manually deploy to ${{ matrix.environment }}
+    name: Manually deploy to ${{ github.event.inputs.environment }}
     runs-on: ubuntu-20.04
 
     steps:
@@ -67,9 +55,9 @@ jobs:
     - name: Configure AWS credentials
       # uses: aws-actions/configure-aws-credentials@v1
       # with:
-      #   aws-access-key-id: ${{ secrets[matrix.aws_access_key_id] }}
-      #   aws-secret-access-key: ${{ secrets[matrix.aws_secret_access_key] }}
-      #   aws-region: ${{ secrets[matrix.aws_region] }}
+        # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+        # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+        # aws-region: ${{ env.AWS_REGION }}
       run: echo "Configure AWS creds"
 
     - name: Login to Amazon ECR
@@ -92,10 +80,12 @@ jobs:
         echo "Building ${{ env.IMAGE_TAG }}"
       if: github.event.inputs.app_version == ''
 
-    - run: if [ ${{ github.event.inputs.app_version }} != '' ]; then 
-        echo ::set-output name=tag_name::${{ github.event.inputs.app_version }}
+    - run: |
+        if [ ${{ github.event.inputs.app_version }} != '' ]; then 
+          echo ::set-output name=tag_name::${{ github.event.inputs.app_version }}
         else
-        echo ::set-output name=tag_name::${{ steps.build-image.outputs.image }}
+          echo ::set-output name=tag_name::${{ steps.build-image.outputs.image }}
+        fi
       id: image
 
     - name: Debug image version to deploy
