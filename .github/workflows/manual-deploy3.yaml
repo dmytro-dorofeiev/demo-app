@@ -1,5 +1,5 @@
 
-name: Manually deploy 2
+name: Manually deploy 3
 
 on:
   workflow_dispatch:
