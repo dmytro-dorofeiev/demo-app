@@ -78,6 +78,7 @@ jobs:
         # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         # echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
         echo "Building ${{ env.IMAGE_TAG }}"
+        echo "::set-output name=image::${{ env.IMAGE_TAG }}"
       if: github.event.inputs.app_version == ''
 
     - name: Set image version
