@@ -80,14 +80,15 @@ jobs:
         echo "Building ${{ env.IMAGE_TAG }}"
       if: github.event.inputs.app_version == ''
 
-    - run: |
+    - name: Set image version
+      id: image
+      run: |
         if [ -z ${{ github.event.inputs.app_version }} ]; then 
           echo ::set-output name=image::${{ github.event.inputs.app_version }}
         else
           # echo ::set-output name=image::${{ steps.build-image.outputs.image }}
           echo ::set-output name=image::docker-0.0.1
         fi
-      id: image
 
     - name: Debug image version to deploy
       run: echo "image version = ${{ steps.image.outputs.image }}"
