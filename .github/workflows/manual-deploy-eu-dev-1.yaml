@@ -83,11 +83,11 @@ jobs:
     - name: Set image version
       id: image
       run: |
-        if [ -z ${{ github.event.inputs.app_version }} ]; then 
-          echo ::set-output name=image::${{ github.event.inputs.app_version }}
+        if [ -n ${{ github.event.inputs.app_version }} ]; then 
+          echo "::set-output name=image::${{ github.event.inputs.app_version }}"
         else
           # echo ::set-output name=image::${{ steps.build-image.outputs.image }}
-          echo ::set-output name=image::docker-0.0.1
+          echo "::set-output name=image::docker-0.0.1"
         fi
 
     - name: Debug image version to deploy
@@ -110,6 +110,5 @@ jobs:
       #   wait-for-service-stability: true
       run: |
         echo "Deploy \
-        task-definition: ${{ steps.task-def.outputs.task-definition }} \
         service: ${{ env.ECS_SERVICE }} \
         cluster: ${{ env.ECS_CLUSTER_NAME }}"
