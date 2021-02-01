@@ -65,11 +65,6 @@ jobs:
       # uses: aws-actions/amazon-ecr-login@v1
       run: echo "Login to ECR"
 
-    - name: Set image version
-      id: build-image
-      run: echo "::set-output name=image::${{ github.event.inputs.app_version }}"
-      if: github.event.inputs.app_version != ''
-
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
@@ -85,9 +80,17 @@ jobs:
         echo "Building ${{ env.IMAGE_TAG }}"
       if: github.event.inputs.app_version == ''
 
+    - name: Set image version
+      id: set_image
+      run: |
+        if [ -n ${{ github.event.inputs.app_version }} ]; then 
+          echo "::set-output name=image::${{ github.event.inputs.app_version }}"
+        else
+          echo ::set-output name=image::${{ steps.build-image.outputs.image }}
+        fi
 
     - name: Debug image version to deploy
-      run: echo "image version = ${{ steps.build-image.outputs.image }}"
+      run: echo "image version = ${{ steps.set_image.outputs.image }}"
 
     # - name: Fill in the new image ID in the Amazon ECS task definition
     #   id: task-def
@@ -95,7 +98,7 @@ jobs:
     #   with:
     #     task-definition: ${{ env.ECS_TASK_DEFINITION }}
     #     container-name: ${{ env.ECS_CONTAINER_NAME }}
-    #     image: ${{ steps.image.outputs.image }}
+    #     image: ${{ steps.set_image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition
       # uses: aws-actions/amazon-ecs-deploy-task-definition@v1
