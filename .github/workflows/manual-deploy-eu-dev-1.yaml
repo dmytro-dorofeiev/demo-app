@@ -112,7 +112,7 @@ jobs:
         echo "Deploy \
         service: ${{ env.ECS_SERVICE }} \
         cluster: ${{ env.ECS_CLUSTER_NAME }}"
-        echo "'[ { title: "title for my annotation", message: "Docker image", version: "${{ steps.set_image.outputs.image }}" } ]'" > version.json
+        echo "[ { title: \"title for my annotation\", message: \"Docker image\", version: \"${{ steps.set_image.outputs.image }}\" } ]" > version.json
         
     - name: Annotate
       uses: yuzutech/annotations-action@v0.1.0
