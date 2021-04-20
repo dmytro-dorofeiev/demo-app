@@ -27,7 +27,7 @@ env:
 
 jobs:
   deploy_job:
-    name: Manually deploy to ${{ github.event.inputs.environment }} image ${{ steps.set_image.outputs.image }}
+    name: Manually deploy to ${{ github.event.inputs.environment }}
     runs-on: ubuntu-20.04
 
     steps:
@@ -112,3 +112,16 @@ jobs:
         echo "Deploy \
         service: ${{ env.ECS_SERVICE }} \
         cluster: ${{ env.ECS_CLUSTER_NAME }}"
+        
+    - name: Annotate
+      uses: yuzutech/annotations-action@v0.1.0
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        title: 'Docker Image'
+        input: '[
+            {
+              title: "title for my annotation",
+              message: "Docker image",
+              version: "${{ steps.set_image.outputs.image }}"
+            }
+          ]'
