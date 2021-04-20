@@ -118,5 +118,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.set_image.outputs.image }}
-        path: ${{ steps.set_image.outputs.image }}
+#         path: ${{ steps.set_image.outputs.image }}
         
