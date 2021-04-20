@@ -119,5 +119,4 @@ jobs:
       with:
         name: Docker Image version
         path: ${{ steps.set_image.outputs.image }}
-          path: math-homework.txt
         
