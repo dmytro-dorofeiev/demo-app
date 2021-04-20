@@ -27,7 +27,7 @@ env:
 
 jobs:
   deploy_job:
-    name: Manually deploy to ${{ github.event.inputs.environment }}
+    name: Manually deploy to ${{ github.event.inputs.environment }} image ${{ steps.set_image.outputs.image }}
     runs-on: ubuntu-20.04
 
     steps:
