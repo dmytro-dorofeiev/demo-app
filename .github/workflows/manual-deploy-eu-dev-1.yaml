@@ -118,5 +118,9 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.set_image.outputs.image }}
-#         path: ${{ steps.set_image.outputs.image }}
-        
+        path: ${{ steps.set_image.outputs.image }}
+
+  job_name:
+    needs: deploy_job
+    name: Created ${{ steps.set_image.outputs.image }}
+    runs-on: ubuntu-20.04
