@@ -120,10 +120,5 @@ jobs:
         name: ${{ steps.set_image.outputs.image }}
         path: ${{ steps.set_image.outputs.image }}
 
-  job_name:
-    needs: deploy_job
-    name: Created ${{ needs.deploy_job.steps.set_image.outputs.image }}
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Output docker image name
-        run: echo ""
+    outputs:
+      version: ${{ steps.set_image.outputs.image }}
