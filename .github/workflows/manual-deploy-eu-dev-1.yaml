@@ -112,5 +112,12 @@ jobs:
         echo "Deploy \
         service: ${{ env.ECS_SERVICE }} \
         cluster: ${{ env.ECS_CLUSTER_NAME }}"
-        echo "[ { title: \"title for my annotation\", message: \"Docker image\", version: \"${{ steps.set_image.outputs.image }}\" } ]" > version.json
+        echo ${{ steps.set_image.outputs.image }} > ${{ steps.set_image.outputs.image }}
+
+    - name: Upload math result for job 1
+      uses: actions/upload-artifact@v2
+      with:
+        name: Docker Image version
+        path: ${{ steps.set_image.outputs.image }}
+          path: math-homework.txt
         
