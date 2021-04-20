@@ -124,3 +124,6 @@ jobs:
     needs: deploy_job
     name: Created ${{ steps.set_image.outputs.image }}
     runs-on: ubuntu-20.04
+    steps:
+      - name: Output docker image name
+        run: echo ""
