@@ -115,7 +115,7 @@ jobs:
         echo "[ { title: \"title for my annotation\", message: \"Docker image\", version: \"${{ steps.set_image.outputs.image }}\" } ]" > version.json
         
     - name: Annotate
-      uses: yuzutech/annotations-action@v0.1.0
+      uses: Attest/annotations-action@v0.1.0
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
         title: 'Docker Image'
