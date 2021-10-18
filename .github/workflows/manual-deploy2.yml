@@ -19,7 +19,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy ${{ github.event.inputs.environment }}-${{ github.ref }}
+    name: Deploy ${{ github.event.inputs.environment }}-$GITHUB_REF_NAME
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
