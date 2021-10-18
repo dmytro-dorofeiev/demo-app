@@ -28,14 +28,14 @@ jobs:
 
     - uses: hmarr/debug-action@v2
 
-    - name: Set outputs
+    - name: Set outputs $GITHUB_REF
       id: vars
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
     - name: Check outputs
       run: echo ${{ steps.vars.outputs.sha_short }}
 
-    - name: Deploy to dev from ${{ github.event.inputs.version }}
+    - name: Deploy to dev from ${GITHUB_REF##*/}
       run: |
           echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
           echo "all events ${{ github.event.payload }}"
