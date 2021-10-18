@@ -16,10 +16,11 @@ on:
   #   branches: [main]
   #   types:
   #     - completed
-
+env:
+  ENVIRONMENT: "qa"
 jobs:
   deploy:
-    name: Deploy env ${{ github.event.inputs.environment }} branch ${{ github.ref }} version ${{ github.event.inputs.version }}
+    name: Deploy env ${{ env.ENVIRONMENT }} branch ${{ github.ref }} version ${{ github.event.inputs.version }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -28,7 +29,7 @@ jobs:
 
     - name: Debug variables
       uses: hmarr/debug-action@v2
-
+    - run: echo "env = ${{ env.ENVIRONMENT }}
     - name: Set outputs
       id: vars
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
