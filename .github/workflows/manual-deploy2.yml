@@ -1,4 +1,3 @@
-name: Manually deploy 2
 on:
   workflow_dispatch:
     inputs:
@@ -17,6 +16,7 @@ on:
   #   types:
   #     - completed
 
+name: Manually deploy ${{ github.event.inputs.environment }} 
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
     - name: Check outputs
       run: echo ${{ steps.vars.outputs.sha_short }}
 
-    - name: Deploy to dev
+    - name: Deploy to dev 
       run: |
           echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
       if: ${{ github.event.inputs.environment == 'dev' }} || ${{ github.workflow.name == 'CI build' }}
@@ -45,7 +45,7 @@ jobs:
     - name: Deploy to stg
       run: |
         echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-      if: ${{ github.event.inputs.environment == 'stg' }}
+      if: ${{ github.event.inputs.environment == 'stg' }} &&  contains('["kingthorin","noinarisak"]', github.actor)
 
     # - uses: notlmn/release-with-changelog@v3
     #   with:
