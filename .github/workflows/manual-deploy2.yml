@@ -22,7 +22,7 @@ env:
 
 jobs:
   deploy:
-    name: Deploy env ${{ github.event.inputs.environment }} branch ${{ env.BRANCH_NAME }} version ${{ github.event.inputs.version }}
+    name: Deploy env ${{ github.event.inputs.environment }} branch $BRANCH_NAME version ${{ github.event.inputs.version }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
