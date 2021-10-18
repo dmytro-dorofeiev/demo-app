@@ -19,12 +19,14 @@ on:
 
 jobs:
   deploy:
-    name: Deploy ${{ github.event.inputs.environment }}-${{ github.head_ref }}
+    name: Deploy ${{ github.event.inputs.environment }}-${{ github.ref }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 10
+
+    - uses: hmarr/debug-action@v2
 
     - name: Set outputs
       id: vars
