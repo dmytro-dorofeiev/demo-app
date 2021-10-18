@@ -17,12 +17,9 @@ on:
   #   types:
   #     - completed
 
-env:
-  branch_name: ${GITHUB_REF##*/}
-
 jobs:
   deploy:
-    name: Deploy env ${{ github.event.inputs.environment }} branch $branch_name version ${{ github.event.inputs.version }}
+    name: Deploy env ${{ github.event.inputs.environment }} branch $GITHUB_REF version ${{ github.event.inputs.version }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -38,7 +35,7 @@ jobs:
     - name: Check outputs
       run: echo ${{ steps.vars.outputs.sha_short }}
 
-    - name: Deploy to dev 
+    - name: Deploy to dev from ${{ github.event.inputs.version }}
       run: |
           echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
           echo "all events ${{ github.event.payload }}"
