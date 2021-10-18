@@ -17,9 +17,12 @@ on:
   #   types:
   #     - completed
 
+env:
+  branch_name: ${GITHUB_REF##*/}
+
 jobs:
   deploy:
-    name: Deploy ${{ github.event.inputs.environment }}-${{ github.ref }}
+    name: Deploy env ${{ github.event.inputs.environment }} branch ${{ env.branch_name }} version ${{ github.event.inputs.version }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
