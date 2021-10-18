@@ -19,7 +19,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy ${{ github.event.inputs.environment }}-${{ github.ref }}
+    name: Deploy ${{ github.event.inputs.environment }}-${{ github.head_ref }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -36,7 +36,7 @@ jobs:
     - name: Deploy to dev 
       run: |
           echo "Deploy to ${{ github.event.inputs.environment }} with artifact ${{ github.event.inputs.version }}!"
-          echo "all events ${{ github.event }}"
+          echo "all events ${{ github.event.payload }}"
       if: ${{ github.event.inputs.environment == 'dev' }} || ${{ github.workflow.name == 'CI build' }}
 
     - name: Deploy to qa
